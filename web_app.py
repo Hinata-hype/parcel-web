@@ -53,11 +53,12 @@ PAGE = """
 </head>
 <body>
   <h1>Smart Parcel Scanner</h1>
+  <p><a href="{{ url_for('home') }}">← หน้าแรกสำหรับผู้รับพัสดุ</a></p>
   {% if login %}
     <div class="card">
       <h2>เข้าสู่ระบบผู้ดูแล</h2>
       <form method="post">
-        <input type="password" name="password"
+        <input type="password" name="password" autocomplete="current-password"
                placeholder="รหัสผ่านผู้ดูแล" required>
         <button type="submit">เข้าสู่ระบบ</button>
       </form>
@@ -165,7 +166,6 @@ def scanner():
 
 
 @app.get('/bot-help')
-@admin_required
 def bot_help():
     return render_template('bot_help.html')
 
@@ -276,7 +276,12 @@ def login():
     return render_template_string(PAGE, login=True, error=error)
 
 
-@app.route("/")
+@app.get("/")
+def home():
+    return render_template("home.html")
+
+
+@app.route("/admin")
 @admin_required
 def dashboard():
     try:
@@ -294,4 +299,4 @@ def dashboard():
 @app.route("/logout")
 def logout():
     session.clear()
-    return redirect(url_for("login"))
+    return redirect(url_for("home"))

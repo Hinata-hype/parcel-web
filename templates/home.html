@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="th">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Smart Parcel Scanner</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='scanner.css') }}">
+<style>
+.home-hero{max-width:780px;margin-bottom:32px}.home-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px}.home-grid .card{margin:0}.button-link{display:inline-block;background:#126e64;color:white;padding:12px 20px;border-radius:8px;text-decoration:none;font-weight:bold}.button-link:hover{background:#0c574f}.home-actions{display:flex;align-items:center;flex-wrap:wrap;gap:18px;margin-top:24px}.steps{padding-left:24px}.home-footer{margin-top:28px}@media(max-width:700px){.home-grid{grid-template-columns:1fr}}
+</style></head>
+<body>
+<header><a href="{{ url_for('home') }}">Smart Parcel Scanner</a><a href="{{ url_for('dashboard') }}">สำหรับผู้ดูแล</a></header>
+<main>
+<section class="home-hero"><p class="eyebrow">ระบบรับพัสดุและแจ้งเตือน</p><h1>Smart Parcel Scanner</h1>
+<p class="intro">เพิ่มเลขพัสดุไว้ล่วงหน้า แล้วรับแจ้งเตือนผ่าน Telegram เมื่อพัสดุมาถึงจุดรับ</p>
+<p>ผู้รับพัสดุใช้หน้านี้ได้เลย ไม่ต้องมีรหัสผ่านเว็บ</p></section>
+<div class="home-grid">
+<section class="card"><h2>เพิ่มเลขพัสดุของฉัน</h2><p>เปิดบอท กด Start และใช้ชื่อเดิมที่ลงทะเบียนไว้ หรือกรอกชื่อหากใช้งานครั้งแรก</p>
+<ol class="steps"><li>ส่ง <code>/addparcel</code> ในบอท</li><li>ส่งเลขพัสดุ แล้วรอข้อความยืนยัน</li><li>รอรับแจ้งเตือนเมื่อจุดรับสแกนพัสดุ</li></ol>
+<div class="home-actions"><a class="button-link" href="https://t.me/KittiSmartParcel_bot" target="_blank" rel="noopener noreferrer">เปิดบอทเพื่อเพิ่มเลข</a></div></section>
+<section class="card"><h2>ตรวจเลขที่ฉันกำลังรอ</h2><p>เปิดแชทบอทด้วยบัญชี Telegram ที่ลงทะเบียน แล้วส่ง <code>/myparcels</code> เพื่อดูเลขพัสดุที่ยังรอรับของคุณ</p>
+<p>เมื่อพัสดุมาถึง ให้ดูข้อความแจ้งเตือนในแชทเดียวกัน</p>
+<div class="home-actions"><a class="button-link" href="https://t.me/KittiSmartParcel_bot" target="_blank" rel="noopener noreferrer">เปิดบอทเพื่อตรวจเลข</a><a href="{{ url_for('bot_help') }}">วิธีใช้งาน</a></div></section>
+</div>
+<section class="card home-footer"><h2>สำหรับผู้ดูแลจุดรับพัสดุ</h2><p>เข้าสู่ระบบเพื่อสแกนรับพัสดุ ดูประวัติ และตรวจภาพหลักฐาน</p><a href="{{ url_for('dashboard') }}">เข้าสู่ส่วนผู้ดูแล →</a></section>
+</main></body></html>

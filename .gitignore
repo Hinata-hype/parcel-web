@@ -1,0 +1,16 @@
+firebase_key.json
+*firebase*key*.json
+.env
+.env.*
+!.env.example
+.venv/
+__pycache__/
+*.pyc
+snapshots/
+*.pt
+# These legacy local scanner copies are not used by web_app.py.
+bot_listener.py
+telegram_notify.py
+snapshot.py
+ocr_reader.py
+label_detector.py

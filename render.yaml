@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: parcel-web
+    name: smart-parcel-scanner
     runtime: python
     plan: free
     buildCommand: pip install -r requirements.txt

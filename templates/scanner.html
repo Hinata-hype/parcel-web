@@ -3,7 +3,7 @@
 <meta name="csrf-token" content="{{ csrf }}"><title>สแกนรับพัสดุ · Smart Parcel</title>
 <link rel="stylesheet" href="{{ url_for('static', filename='scanner.css') }}">
 <script defer src="{{ url_for('static', filename='scanner.js') }}"></script></head>
-<body><header><a href="/">← แดชบอร์ด</a><span>SMART PARCEL / จุดรับพัสดุ</span><a href="/bot-help">วิธีใช้ Telegram</a></header>
+<body><header><a href="{{ url_for('dashboard') }}">← แดชบอร์ด</a><span>SMART PARCEL / จุดรับพัสดุ</span><a href="/bot-help">วิธีใช้ Telegram</a></header>
 <main><p class="eyebrow">รับพัสดุเข้าระบบ</p><h1>สแกนป้าย เก็บหลักฐาน</h1>
 <p class="intro">แสดงบาร์โค้ดหรือ QR ของเลขที่ผู้รับจองไว้ ระบบจะบันทึกภาพและแจ้งผู้รับอัตโนมัติ</p>
 <div class="layout"><section class="card camera"><div class="viewport"><video id="camera" autoplay muted playsinline></video>
