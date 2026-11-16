@@ -67,12 +67,32 @@ class ScanAPITests(unittest.TestCase):
         self.assertIn(b'<video', response.data)
         self.assertIn(b'test-csrf', response.data)
 
-    def test_authentication_and_csrf_required(self):
+    def test_public_scan_requires_csrf_and_evidence_stays_private(self):
         self.assertEqual(self.scan(csrf=False).status_code, 403)
         with self.client.session_transaction() as session:
             session.clear()
-        self.assertEqual(self.scan().status_code, 401)
+        self.assertEqual(self.scan().status_code, 403)
         self.assertEqual(self.client.get('/evidence/' + IDENTIFIER).status_code, 302)
+
+    def test_public_scan_saves_but_never_exposes_recipient_or_old_evidence(self):
+        with self.client.session_transaction() as session:
+            session.pop('admin')
+        for duplicate in (False, True):
+            with self.subTest(duplicate=duplicate), \
+                 patch.object(web_app.receipt_store, 'get_receipt', return_value=record() if duplicate else None), \
+                 patch.object(web_app.receipt_store, 'pending_members', return_value=[MEMBER]), \
+                 patch.object(web_app.receipt_store, 'save_receipt', return_value=(record(), True)) as save, \
+                 patch.object(web_app, 'notify_receipt', return_value=True) as notify:
+                response = self.scan()
+                self.assertEqual(response.status_code, 200)
+                self.assertEqual(response.json['status'], 'duplicate' if duplicate else 'received')
+                self.assertEqual(set(response.json), {'status', 'tracking_no', 'notified'})
+                if duplicate:
+                    save.assert_not_called(); notify.assert_not_called()
+                else:
+                    save.assert_called_once(); notify.assert_called_once()
+        endpoint = '/api/receipts/' + IDENTIFIER + '/notify'
+        self.assertEqual(self.client.post(endpoint, headers={'X-CSRF-Token':'test-csrf'}).status_code, 401)
 
     def test_unknown_tracking_does_not_save_or_notify(self):
         with patch.object(web_app.receipt_store, 'get_receipt', return_value=None), \

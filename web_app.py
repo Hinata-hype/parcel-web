@@ -53,7 +53,7 @@ PAGE = """
 </head>
 <body>
   <h1>Smart Parcel Scanner</h1>
-  <p><a href="{{ url_for('home') }}">← หน้าแรกสำหรับผู้รับพัสดุ</a></p>
+  <p><a href="{{ url_for('home') }}">← หน้าแรก / สแกนพัสดุ</a></p>
   {% if login %}
     <div class="card">
       <h2>เข้าสู่ระบบผู้ดูแล</h2>
@@ -150,19 +150,27 @@ def valid_receipt_id(identifier):
 
 
 def public_receipt(record, duplicate=False):
-    return {
+    result = {
         "status": "duplicate" if duplicate else "received",
-        "member_name": record["member_name"], "tracking_no": record["tracking_no"],
-        "scanned_at": record["scanned_at"], "notified": bool(record.get("notified")),
-        "evidence_url": url_for('evidence', identifier=record["evidence_id"]),
-        "receipt_url": url_for('receipt_detail', identifier=record["evidence_id"]),
+        "tracking_no": record["tracking_no"], "notified": bool(record.get("notified")),
     }
+    # Couriers can submit a parcel without access to recipients or past evidence.
+    if session.get("admin"):
+        result.update(
+            member_name=record["member_name"], scanned_at=record["scanned_at"],
+            evidence_url=url_for('evidence', identifier=record["evidence_id"]),
+            receipt_url=url_for('receipt_detail', identifier=record["evidence_id"]),
+        )
+    return result
+
+
+def scan_ready():
+    return bool(app.secret_key and app.secret_key != "change-this-before-deploy")
 
 
 @app.get('/scan')
-@admin_required
 def scanner():
-    return render_template('scanner.html', csrf=csrf_token())
+    return render_template('scanner.html', csrf=csrf_token() if scan_ready() else "")
 
 
 @app.get('/bot-help')
@@ -171,8 +179,9 @@ def bot_help():
 
 
 @app.post('/api/scan')
-@admin_required
 def scan_frame():
+    if not scan_ready():
+        return {"error": "ระบบสแกนยังไม่พร้อม กรุณาติดต่อผู้ดูแล"}, 503
     if not csrf_valid():
         return {"error": "เซสชันไม่ถูกต้อง กรุณารีเฟรชหน้าเว็บ"}, 403
     upload = request.files.get('image')
@@ -278,7 +287,7 @@ def login():
 
 @app.get("/")
 def home():
-    return render_template("home.html")
+    return scanner()
 
 
 @app.route("/admin")

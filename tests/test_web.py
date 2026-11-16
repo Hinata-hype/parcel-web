@@ -38,12 +38,24 @@ class DashboardTests(unittest.TestCase):
     def test_private_pages_remain_protected_when_home_is_public(self):
         identifier = "web_" + "a" * 64
         self.assertEqual(self.client.get("/").status_code, 200)
-        for path in ("/admin", "/scan", "/receipts/" + identifier, "/evidence/" + identifier):
+        self.assertEqual(self.client.get("/scan").status_code, 200)
+        for path in ("/admin", "/receipts/" + identifier, "/evidence/" + identifier):
             with self.subTest(path=path):
                 response = self.client.get(path)
                 self.assertEqual(response.status_code, 302)
                 self.assertTrue(response.location.endswith("/login"))
-        self.assertEqual(self.client.post("/api/scan").status_code, 401)
+        self.assertEqual(self.client.post("/api/scan").status_code, 403)
+
+    def test_home_shows_scanner_before_recipient_tools(self):
+        page = self.client.get('/').data
+        self.assertLess(page.index(b'<video'), page.index(b'/addparcel'))
+        self.assertLess(page.index(b'<video'), page.index(b'/myparcels'))
+        self.assertNotIn(b'name="password"', page)
+
+    def test_unconfigured_public_scanner_is_disabled(self):
+        with patch.dict(web_app.app.config, SECRET_KEY=''):
+            self.assertIn(b'id="start" disabled', self.client.get('/').data)
+            self.assertEqual(self.client.post('/api/scan').status_code, 503)
 
     def test_dashboard_requires_login(self):
         with patch.object(web_app, "init_db") as init:
