@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="th"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="csrf-token" content="{{ csrf }}"><title>สแกนรับพัสดุ · Smart Parcel</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='scanner.css') }}">
+<script defer src="{{ url_for('static', filename='scanner.js') }}"></script></head>
+<body><header><a href="/">← แดชบอร์ด</a><span>SMART PARCEL / จุดรับพัสดุ</span><a href="/bot-help">วิธีใช้ Telegram</a></header>
+<main><p class="eyebrow">รับพัสดุเข้าระบบ</p><h1>สแกนป้าย เก็บหลักฐาน</h1>
+<p class="intro">แสดงบาร์โค้ดหรือ QR ของเลขที่ผู้รับจองไว้ ระบบจะบันทึกภาพและแจ้งผู้รับอัตโนมัติ</p>
+<div class="layout"><section class="card camera"><div class="viewport"><video id="camera" autoplay muted playsinline></video>
+<div id="camera-placeholder">กล้องพร้อมเมื่อคุณอนุญาต<br><small>วางป้ายให้เห็นเลขพัสดุชัดเจนทั้งป้าย</small></div></div>
+<label for="device">เลือกกล้อง</label><select id="device"><option value="">กล้องเริ่มต้น / กล้องหลัง</option></select>
+<div class="actions"><button id="start">เปิดกล้องและสแกน</button><button id="stop" class="secondary" disabled>หยุดกล้อง</button></div>
+<p id="status" role="status" aria-live="polite">ยังไม่เปิดกล้อง</p>
+<details><summary>ใช้ภาพถ่ายแทนกล้อง</summary><p>เลือกภาพป้ายพัสดุ ระบบจะอ่านเลขจากภาพและบันทึกภาพนี้เป็นหลักฐานเมื่อพบผู้รับ</p>
+<label for="photo">ภาพ JPEG / PNG / WebP ไม่เกิน 5 MB</label><input id="photo" type="file" accept="image/jpeg,image/png,image/webp" capture="environment"></details>
+</section><aside><section class="card"><h2>รับของใน 3 ขั้นตอน</h2><ol><li>ผู้รับเพิ่มเลขผ่าน <code>/addparcel</code></li><li>เปิดกล้อง แสดงป้ายทีละชิ้น</li><li>ตรวจชื่อและภาพที่บันทึกสำเร็จ</li></ol>
+<p class="note">ภาพยืนยันการรับเข้าจุดรับพัสดุ ยังไม่ใช่การยืนยันว่าเจ้าของมารับของแล้ว</p></section>
+<section id="result" class="card" hidden><p class="eyebrow" id="result-label"></p><h2 id="owner"></h2><p id="tracking"></p><p id="received-at"></p><p id="notification"></p>
+<img id="evidence" alt="ภาพหลักฐานที่บันทึกไว้"><p><a id="receipt-link">เปิดหลักฐานและสถานะ Telegram</a></p><button id="next">สแกนพัสดุถัดไป</button></section></aside></div>
+<p class="note">กล้องใช้ได้บน localhost หรือเว็บ HTTPS หากเปิดไม่ได้ ให้ตรวจสิทธิ์กล้องและปิดโปรแกรม main.py ที่อาจใช้กล้องอยู่</p></main></body></html>

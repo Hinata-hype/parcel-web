@@ -1,0 +1,10 @@
+<!doctype html><html lang="th"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>หลักฐานรับพัสดุ</title><link rel="stylesheet" href="{{ url_for('static', filename='scanner.css') }}"></head><body>
+<header><a href="/">← แดชบอร์ด</a><a href="/scan">สแกนพัสดุถัดไป</a></header><main><section class="card">
+<p class="eyebrow">รับเข้าจุดรับพัสดุแล้ว</p><h1>{{ receipt.member_name }}</h1><p>เลขพัสดุ: {{ receipt.tracking_no }}</p><p>เวลารับเข้า: {{ receipt.scanned_at }}</p>
+<p class="note">หลักฐานนี้ยืนยันการรับเข้าจุดรับพัสดุ ยังไม่ยืนยันว่าเจ้าของมารับแล้ว</p>
+<p id="notify-status" role="status">{{ 'ส่ง Telegram สำเร็จแล้ว' if receipt.notified else 'ยังไม่ยืนยันการส่ง Telegram แต่บันทึกหลักฐานรับของแล้ว' }}</p>
+{% if not receipt.notified %}<button id="retry" data-csrf="{{ csrf }}" data-endpoint="{{ url_for('retry_notification', identifier=identifier) }}">ลองส่ง Telegram อีกครั้ง</button>{% endif %}
+<p><a href="{{ url_for('evidence', identifier=identifier) }}" download>ดาวน์โหลดภาพหลักฐาน</a></p>
+<img class="proof" src="{{ url_for('evidence', identifier=identifier) }}" alt="ภาพหลักฐานพร้อมเลขพัสดุและเวลารับเข้า">
+</section></main><script src="{{ url_for('static', filename='receipt.js') }}"></script></body></html>

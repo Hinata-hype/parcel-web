@@ -1,0 +1,14 @@
+<!doctype html><html lang="th"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>เพิ่มเลขพัสดุผ่าน Telegram</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='scanner.css') }}"></head><body><header><a href="/">← แดชบอร์ด</a><a href="/scan">เปิดหน้าสแกน</a></header><main>
+<p class="eyebrow">เตรียมข้อมูลก่อนรับพัสดุ</p><h1>ให้บอทรู้ว่าพัสดุเป็นของใคร</h1>
+<section class="card"><h2>สำหรับผู้รับพัสดุ</h2><ol>
+<li>เปิด Telegram ค้นหาชื่อบอทที่ผู้ดูแลสร้าง แล้วกด <strong>Start</strong> หรือส่ง <code>/start</code></li>
+<li>ส่งชื่อที่ใช้บนป้ายพัสดุ เช่น <strong>สมชาย ใจดี</strong> รอข้อความยืนยันลงทะเบียน</li>
+<li>ส่ง <code>/addparcel</code> แล้วส่งเลขพัสดุ เช่น <code>JTTH203447892502</code> หรือส่ง <code>/addparcel JTTH203447892502</code> ในข้อความเดียว</li>
+<li>รอคำตอบว่า “บันทึกแล้ว” ใช้ <code>/myparcels</code> เพื่อตรวจเลขที่ยังรอรับ</li>
+<li>เมื่อจุดรับสแกนเลขนี้ ระบบจะบันทึกภาพและส่งข้อความมาที่แชทของคุณ</li></ol>
+<p>เพิ่มเลขใหม่ทุกครั้งที่สั่งของ ให้เลขตรงกับบาร์โค้ดบนกล่อง หากเลขไม่ตรงจะยังบันทึกรับให้ไม่ได้</p></section>
+<section class="card"><h2>สำหรับผู้ดูแล</h2><p>ตั้ง Telegram token ในไฟล์ <code>.env</code> บนเครื่อง แล้วเปิด <code>start_bot.bat</code> ค้างไว้หนึ่งหน้าต่าง บอทกับเว็บต้องใช้ Firebase โปรเจกต์เดียวกัน</p>
+<p>หา username ของบอทได้จาก Telegram → <strong>@BotFather → /mybots</strong> แล้วเลือกบอทของคุณ</p>
+<p>หลังแก้ token ให้เปิดบอทและเว็บใหม่ หน้าสแกนบนเว็บทำงานได้โดยไม่ต้องเปิด <code>main.py</code></p>
+<p class="note">หากบอทไม่ตอบ ให้ตรวจหน้าต่าง start_bot.bat และตรวจว่าใช้ token ของบอทตัวเดียวกับที่ผู้รับเปิดแชทอยู่</p></section></main></body></html>

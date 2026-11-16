@@ -1,0 +1,7 @@
+Flask>=3.0,<4
+gunicorn>=22,<24; sys_platform != 'win32'
+firebase-admin>=6.5,<8
+python-dotenv>=1,<2
+Pillow>=10,<13
+zxing-cpp>=2.3,<4
+python-telegram-bot>=21,<23

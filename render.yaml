@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: parcel-web
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn web_app:app --bind 0.0.0.0:$PORT
+    healthCheckPath: /health
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.13.3
+      - key: SECRET_KEY
+        generateValue: true
+      - key: ADMIN_PASSWORD
+        sync: false
+      - key: FIREBASE_KEY_JSON
+        sync: false
+      - key: TELEGRAM_BOT_TOKEN
+        sync: false
